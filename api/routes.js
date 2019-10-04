@@ -1,4 +1,5 @@
 const fs = require('fs');
+const users = ["andre", "Luiz"];
 
 const requestHandler = (req, res) => {
 
@@ -7,47 +8,47 @@ const requestHandler = (req, res) => {
 
     if (url === '/') {
         res.write('<html>');
-        res.write('<head><title>Enter Message</title><head>');
-        res.write('<body><form action="/message" method="POST"><input type="text" name="message"><button type="submit">Send</button></form></body>');
+        res.write('<head><title>Create a User</title><head>');
+        res.write('</body>');
+        res.write('<h4>Insert name:</h4>');
+        res.write('<form action="/create-user" method="POST"><input type="text" name="user-name"><button type="submit">Send</button></form>');
+        res.write('<a href="/users"><button>Users</button></a>');
+        res.write('</body>');
         res.write('</html>');
         return res.end();
     }
 
-    if (url === '/message' && method === 'POST') {
+    if (url === '/create-user' && method === 'POST') {
         const body = [];
-        req.on('data', (chunk) => {
-            console.log(chunk);
-            body.push(chunk);
+        req.on('data', (value) => {
+            body.push(value);            
         })
 
         req.on('end', () => {
             const parsedBody = Buffer.concat(body).toString()
-            const message = parsedBody.split('=')[1];
-            fs.writeFile('message.txt', message, err => {
-                res.statusCode = 302;
-                res.setHeader('Location', '/');
-                return res.end();
-            });
+            const name = parsedBody.split('=')[1];
+            console.log(name);
+            users.push(name);
         })
-        
     }
-    res.setHeader('Content-Type', 'text/html');
-    res.write('<html>');
-    res.write('<head><title>My First Page</title></head>');
-    res.write('<body><h1>Hello from Node.js Serve!! </h1></body>');
-    res.write('</html>');
-    res.end();
+
+    if (url === '/users') {
+        res.setHeader('Content-Type', 'text/html');
+        res.write('<html>');
+        res.write('<head><title>Users</title></head>');
+
+        res.write('<body><h1>Users!!</h1>');
+
+        res.write('<ul>');
+        users.forEach(user => {
+            res.write('<li><h1>'+user+'</h1></li>');
+        });
+        res.write('</ul>');
+        res.write('<a href="/"><button>Create Users</button></a>');
+        res.write('</body>');
+        res.write('</html>');
+        return res.end();
+    }
 }
 
-// module.exports = requestHandler;
-
-// module.exports = {
-//     handler: requestHandler,
-//     someText: "Star wars!!"
-// }
-
-// module.exports.handler = requestHandler;
-// module.exports.someText = "Star wars!!";
-
 exports.handler = requestHandler;
-exports.someText = "Star wars!!";
