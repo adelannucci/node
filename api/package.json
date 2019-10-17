@@ -1,0 +1,19 @@
+{
+  "name": "node_js_complete_guide",
+  "version": "1.0.0",
+  "description": "Complete Guide Node.js",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js",
+    "start-server": "node app.js"
+  },
+  "author": "Andre Vannucci",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.19.3"
+  },
+  "dependencies": {
+    "express-session": "^1.16.2"
+  }
+}
